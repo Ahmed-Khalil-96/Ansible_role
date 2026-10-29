@@ -1,0 +1,29 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for httpd
+- name: Install Apache server
+  ansible.builtin.apt:
+    name: apache2
+    state: present
+
+- name: Check the port 80 usage
+  shell: lsof -i :80
+
+- name: disable nginx
+  shell: systemctl disable nginx
+
+- name: stop nginx
+  shell: systemctl stop nginx
+
+- name: start apache
+  ansible.builtin.service:
+    name: apache2
+    state: started
+
+- name: Copy index.html to apache folder
+  ansible.builtin.copy:
+    src: files/index.html
+    dest: /var/www/html
+    owner: root
+    group: root
+    mode: "0644"
